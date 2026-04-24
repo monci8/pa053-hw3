@@ -9,11 +9,14 @@ def handle_query():
     airport = request.args.get('queryAirportTemp')
     if airport:
         try:
-            r = requests.get(f"https://wttr.in/{airport}?format=%t")
+            headers = {'User-Agent': 'curl/7.64.1'}
+            r = requests.get(f"https://wttr.in/{airport}?format=%t", headers=headers)
             temp_raw = r.text.replace('°C', '').replace('+', '').strip()
-            return Response(str(float(temp_raw)), mimetype='application/json')
-        except:
-            return "Error fetching weather", 400
+            temp_cleaned = "".join(c for c in temp_raw if c.isdigit() or c in ".-")
+            
+            return Response(str(float(temp_cleaned)), mimetype='application/json')
+        except Exception as e:
+            return f"Error: {str(e)}", 400
         
     stock = request.args.get('queryStockPrice')
     if stock:
