@@ -10,7 +10,7 @@ def handle_query():
     if airport:
         try:
             headers = {'User-Agent': 'curl/7.64.1'}
-            r = requests.get(f"https://wttr.in/{airport}?format=%t", headers=headers)
+            r = requests.get(f"https://wttr.in/{airport}?format=%t&m", headers=headers)
             temp_raw = r.text.replace('°C', '').replace('+', '').strip()
             temp_cleaned = "".join(c for c in temp_raw if c.isdigit() or c in ".-")
             
